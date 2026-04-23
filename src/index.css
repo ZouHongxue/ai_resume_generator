@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", "Noto Sans SC", system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+}
+
+/* A4 preview scaling */
+.a4-page {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 15mm 20mm;
+  background: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  .a4-page {
+    box-shadow: none;
+    margin: 0;
+    padding: 10mm 15mm;
+  }
+}
