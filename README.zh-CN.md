@@ -30,7 +30,7 @@ npm install
 npm run dev
 ```
 
-打开 http://localhost:5173/resume_generate/
+打开 http://localhost:5173/ai_resume_generator/
 
 ## AI 配置
 
@@ -46,13 +46,20 @@ npm run dev
 2. 填入 API 地址、Key 和模型名称
 3. 支持 DeepSeek、通义千问等 OpenAI 兼容服务
 
+### 免费方案：OpenRouter
+
+[OpenRouter](https://openrouter.ai) 提供多种模型的免费试用额度，可作为 OpenAI 兼容接口使用：
+
+![OpenRouter 免费试用](./docs/open_router.jpg)
+
+- API 地址：`https://openrouter.ai/api`
+- 模型：在 [openrouter.ai/models](https://openrouter.ai/models) 筛选 "Free" 模型
+
 ## 构建与部署
 
 ```bash
 npm run build
 ```
-
-将 `dist/` 目录部署到 GitHub Pages。项目已包含 GitHub Actions 自动部署配置（`.github/workflows/deploy.yml`）。
 
 ## 许可证
 

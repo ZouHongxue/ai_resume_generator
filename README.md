@@ -32,7 +32,7 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173/resume_generate/
+Open http://localhost:5173/ai_resume_generator/
 
 ## AI Configuration
 
@@ -47,13 +47,20 @@ Open http://localhost:5173/resume_generate/
 1. In the app, click **Import** → select **AI mode** → choose **OpenAI / Compatible**
 2. Enter your API base URL, key, and model name
 
+### Free Option: OpenRouter
+
+[OpenRouter](https://openrouter.ai) offers free trial credits for many models. Use it as an OpenAI-compatible API:
+
+![OpenRouter Free Trial](./docs/open_router.jpg)
+
+- API Base URL: `https://openrouter.ai/api`
+- Model: pick any free model from [openrouter.ai/models](https://openrouter.ai/models) (filter by "Free")
+
 ## Build & Deploy
 
 ```bash
 npm run build
 ```
-
-Deploy the `dist/` folder to GitHub Pages. A GitHub Actions workflow is included at `.github/workflows/deploy.yml`.
 
 ## License
 
