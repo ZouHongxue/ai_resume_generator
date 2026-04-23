@@ -1,5 +1,7 @@
 # AI Resume Generator
 
+> **[中文文档 / Chinese Documentation](./README.zh-CN.md)**
+
 A static, client-side resume builder with AI-powered document import. No backend needed — runs entirely in the browser, deployable to GitHub Pages.
 
 ## Features
