@@ -1,15 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import Button from '../common/Button';
 import { useResumeStore } from '../../store/resumeStore';
-import { useSettingsStore } from '../../store/settingsStore';
 import { getTemplateList } from '../templates/TemplateRegistry';
 import { exportToPdf, exportToJson } from '../../lib/export/exportUtils';
 
 export default function PreviewToolbar() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const resume = useResumeStore((s) => s.resume);
   const updateMeta = useResumeStore((s) => s.updateMeta);
-  const language = useSettingsStore((s) => s.language);
+  const isZh = i18n.language?.startsWith('zh');
   const templates = getTemplateList();
 
   return (
@@ -21,7 +20,7 @@ export default function PreviewToolbar() {
       >
         {templates.map((tmpl) => (
           <option key={tmpl.id} value={tmpl.id}>
-            {language === 'zh' ? tmpl.nameZh : tmpl.name}
+            {isZh ? tmpl.nameZh : tmpl.name}
           </option>
         ))}
       </select>

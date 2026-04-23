@@ -3,8 +3,6 @@ import { persist } from 'zustand/middleware';
 import type { AiConfig } from '../types/extraction';
 
 interface SettingsState {
-  language: 'en' | 'zh';
-  setLanguage: (language: 'en' | 'zh') => void;
   aiConfig: AiConfig;
   setAiConfig: (config: Partial<AiConfig>) => void;
   hasApiKey: () => boolean;
@@ -13,8 +11,6 @@ interface SettingsState {
 export const useSettingsStore = create<SettingsState>()(
   persist(
     (set, get) => ({
-      language: 'zh',
-      setLanguage: (language) => set({ language }),
       aiConfig: {
         provider: 'ollama',
         apiKey: '',
