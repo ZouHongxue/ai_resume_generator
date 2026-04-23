@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://zouhongxue.github.io/ai_resume_generator/sitemap.xml
