@@ -71,9 +71,10 @@ export default function ProjectsForm() {
           <div className="space-y-2">
             <label className="text-xs font-medium text-gray-600">{t('fields.highlights')}</label>
             {proj.highlights.map((h, i) => (
-              <div key={i} className="flex gap-2">
-                <input
-                  className="flex-1 rounded-md border border-gray-300 px-3 py-1.5 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              <div key={i} className="flex gap-2 items-start">
+                <textarea
+                  className="flex-1 rounded-md border border-gray-300 px-3 py-1.5 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 resize-y [field-sizing:content]"
+                  rows={Math.max(1, h.split('\n').length)}
                   value={h}
                   onChange={(e) => updateHighlight(proj.id, i, e.target.value)}
                 />

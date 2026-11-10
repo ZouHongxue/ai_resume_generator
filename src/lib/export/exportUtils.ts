@@ -51,8 +51,6 @@ export async function exportToPdf() {
         box-shadow: none !important;
         margin: 0 !important;
         transform: none !important;
-        width: 210mm !important;
-        min-height: 297mm !important;
       }
     }
 
@@ -61,6 +59,12 @@ export async function exportToPdf() {
       margin: 0;
       padding: 0;
       background: white;
+    }
+    .a4-page {
+      box-shadow: none !important;
+      width: 210mm;
+      /* Exactly 297mm rounds up by a pixel and spills onto a blank second page */
+      min-height: ${A4_MIN_HEIGHT_MM}mm !important;
     }
   </style>
 </head>
@@ -71,21 +75,94 @@ export async function exportToPdf() {
 
   printWindow.document.close();
 
-  // Wait for styles/fonts to load, then trigger print
-  printWindow.onload = () => {
-    setTimeout(() => {
-      printWindow.print();
-      printWindow.close();
-    }, 300);
+  let printed = false;
+  const run = async () => {
+    if (printed || printWindow.closed) return;
+    printed = true;
+    try {
+      await printWindow.document.fonts?.ready;
+    } catch {
+      // Font loading errors should not block printing
+    }
+    trimTrailingSectionMargin(printWindow.document);
+    fitToOnePage(printWindow.document);
+    printWindow.print();
+    printWindow.close();
   };
 
+  // Wait for styles/fonts to load, then trigger print
+  printWindow.onload = () => setTimeout(run, 300);
+
   // Fallback if onload doesn't fire
-  setTimeout(() => {
-    if (!printWindow.closed) {
-      printWindow.print();
-      printWindow.close();
-    }
-  }, 2000);
+  setTimeout(run, 2000);
+}
+
+const A4_MIN_HEIGHT_MM = 296;
+/** Content up to this much taller than one page is scaled down to fit instead of spilling over */
+const MAX_FIT_OVERFLOW = 0.15;
+
+function mmToPx(doc: Document, mm: number): number {
+  const probe = doc.createElement('div');
+  probe.style.cssText = `position:absolute;visibility:hidden;height:${mm}mm`;
+  doc.body.appendChild(probe);
+  const px = probe.getBoundingClientRect().height;
+  probe.remove();
+  return px;
+}
+
+/**
+ * Drop the bottom margin of the last section in each column; it only adds height at
+ * the bottom of the page. Templates wrap every section in its own <div>, so a CSS
+ * `section:last-child` rule would match every section, not just the last one.
+ */
+function trimTrailingSectionMargin(doc: Document) {
+  const page = doc.querySelector<HTMLElement>('.a4-page');
+  if (!page) return;
+  const isMultiColumn = getComputedStyle(page).display === 'flex';
+  const lastByColumn = new Map<Element, HTMLElement>();
+  for (const section of page.querySelectorAll<HTMLElement>('section')) {
+    const column = isMultiColumn ? (Array.from(page.children).find((c) => c.contains(section)) ?? page) : page;
+    lastByColumn.set(column, section);
+  }
+  for (const section of lastByColumn.values()) {
+    section.style.setProperty('margin-bottom', '0', 'important');
+  }
+}
+
+/**
+ * If the resume is only slightly taller than one A4 page, shrink it uniformly so it
+ * prints on a single page. The page is widened by 1/zoom so the printed width stays 210mm.
+ */
+function fitToOnePage(doc: Document) {
+  const page = doc.querySelector<HTMLElement>('.a4-page');
+  if (!page) return;
+
+  const pageHeight = mmToPx(doc, A4_MIN_HEIGHT_MM);
+  // Natural (unzoomed) content height at a given layout width
+  const heightAtWidth = (widthMm: number) => {
+    page.style.setProperty('width', `${widthMm}mm`, 'important');
+    page.style.setProperty('min-height', '0', 'important');
+    return page.getBoundingClientRect().height;
+  };
+
+  const natural = heightAtWidth(210);
+  if (natural <= pageHeight || natural > pageHeight * (1 + MAX_FIT_OVERFLOW)) {
+    page.style.removeProperty('width');
+    page.style.removeProperty('min-height');
+    return;
+  }
+
+  // Widening reflows text and changes the height, so refine a few times
+  let zoom = pageHeight / natural;
+  for (let i = 0; i < 5; i++) {
+    const printed = heightAtWidth(210 / zoom) * zoom;
+    if (printed <= pageHeight) break;
+    zoom *= pageHeight / printed;
+  }
+
+  page.style.setProperty('width', `${210 / zoom}mm`, 'important');
+  page.style.setProperty('min-height', `${A4_MIN_HEIGHT_MM / zoom}mm`, 'important');
+  page.style.zoom = String(zoom);
 }
 
 export function exportToJson(resume: ResumeData) {

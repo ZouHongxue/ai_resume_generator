@@ -3,6 +3,7 @@ import type { SectionKey } from '../../types/resume';
 import { DEFAULT_SECTION_ORDER } from '../../types/resume';
 import { formatDateRange } from '../../lib/formatDate';
 import { getSpacing } from '../../lib/contentDensity';
+import HighlightText from './HighlightText';
 
 // Sidebar sections are always rendered in the sidebar
 const SIDEBAR_SECTIONS = new Set<SectionKey>(['personalInfo', 'skills', 'certifications']);
@@ -44,7 +45,7 @@ export default function ModernTemplate({ data, className = '' }: TemplateProps) 
                   {exp.highlights.filter(Boolean).map((h, i) => (
                     <li key={i} className={`text-xs text-gray-600 flex gap-1.5 ${sp.lineHeight}`}>
                       <span className="text-blue-400 mt-0.5">•</span>
-                      <span>{h}</span>
+                      <div className="min-w-0 flex-1"><HighlightText text={h} markerClassName="text-blue-300" /></div>
                     </li>
                   ))}
                 </ul>
@@ -75,7 +76,7 @@ export default function ModernTemplate({ data, className = '' }: TemplateProps) 
                   {proj.highlights.filter(Boolean).map((h, i) => (
                     <li key={i} className={`text-xs text-gray-600 flex gap-1.5 ${sp.lineHeight}`}>
                       <span className="text-blue-400 mt-0.5">•</span>
-                      <span>{h}</span>
+                      <div className="min-w-0 flex-1"><HighlightText text={h} markerClassName="text-blue-300" /></div>
                     </li>
                   ))}
                 </ul>

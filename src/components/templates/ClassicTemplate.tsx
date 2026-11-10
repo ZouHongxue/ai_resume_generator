@@ -3,6 +3,7 @@ import type { SectionKey } from '../../types/resume';
 import { DEFAULT_SECTION_ORDER } from '../../types/resume';
 import { formatDateRange } from '../../lib/formatDate';
 import { getSpacing } from '../../lib/contentDensity';
+import HighlightText from './HighlightText';
 
 export default function ClassicTemplate({ data, className = '' }: TemplateProps) {
   const { personalInfo, education, workExperience, skills, projects, certifications, customSections } = data;
@@ -54,9 +55,9 @@ export default function ClassicTemplate({ data, className = '' }: TemplateProps)
               </div>
               {exp.location && <p className="text-xs text-gray-500">{exp.location}</p>}
               {exp.highlights.filter(Boolean).length > 0 && (
-                <ul className="list-disc list-inside mt-1 space-y-0.5">
+                <ul className="list-disc pl-4 mt-1 space-y-0.5">
                   {exp.highlights.filter(Boolean).map((h, i) => (
-                    <li key={i} className={`text-xs ${sp.lineHeight}`}>{h}</li>
+                    <li key={i} className={`text-xs ${sp.lineHeight}`}><HighlightText text={h} /></li>
                   ))}
                 </ul>
               )}
@@ -84,9 +85,9 @@ export default function ClassicTemplate({ data, className = '' }: TemplateProps)
               </div>
               {proj.description && <p className={`text-xs mt-0.5 ${sp.lineHeight}`}>{proj.description}</p>}
               {proj.highlights.filter(Boolean).length > 0 && (
-                <ul className="list-disc list-inside mt-1 space-y-0.5">
+                <ul className="list-disc pl-4 mt-1 space-y-0.5">
                   {proj.highlights.filter(Boolean).map((h, i) => (
-                    <li key={i} className={`text-xs ${sp.lineHeight}`}>{h}</li>
+                    <li key={i} className={`text-xs ${sp.lineHeight}`}><HighlightText text={h} /></li>
                   ))}
                 </ul>
               )}

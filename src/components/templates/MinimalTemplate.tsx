@@ -3,6 +3,7 @@ import type { SectionKey } from '../../types/resume';
 import { DEFAULT_SECTION_ORDER } from '../../types/resume';
 import { formatDateRange } from '../../lib/formatDate';
 import { getSpacing } from '../../lib/contentDensity';
+import HighlightText from './HighlightText';
 
 export default function MinimalTemplate({ data, className = '' }: TemplateProps) {
   const { personalInfo, education, workExperience, skills, projects, certifications, customSections } = data;
@@ -52,7 +53,7 @@ export default function MinimalTemplate({ data, className = '' }: TemplateProps)
                 <ul className="mt-1.5 space-y-1">
                   {exp.highlights.filter(Boolean).map((h, i) => (
                     <li key={i} className={`text-xs text-gray-500 ${sp.lineHeight} pl-3 relative before:content-['–'] before:absolute before:left-0 before:text-gray-300`}>
-                      {h}
+                      <HighlightText text={h} markerClassName="text-gray-300" />
                     </li>
                   ))}
                 </ul>
@@ -84,7 +85,7 @@ export default function MinimalTemplate({ data, className = '' }: TemplateProps)
                 <ul className="mt-1.5 space-y-1">
                   {proj.highlights.filter(Boolean).map((h, i) => (
                     <li key={i} className={`text-xs text-gray-500 ${sp.lineHeight} pl-3 relative before:content-['–'] before:absolute before:left-0 before:text-gray-300`}>
-                      {h}
+                      <HighlightText text={h} markerClassName="text-gray-300" />
                     </li>
                   ))}
                 </ul>

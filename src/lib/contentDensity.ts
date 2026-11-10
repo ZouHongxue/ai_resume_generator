@@ -29,14 +29,14 @@ function estimateLines(data: ResumeData): number {
   // Work experience
   for (const exp of data.workExperience) {
     lines += 2; // company + position line + date
-    lines += exp.highlights.filter(Boolean).length;
+    lines += exp.highlights.filter(Boolean).reduce((n, h) => n + h.split('\n').length, 0);
   }
 
   // Projects
   for (const proj of data.projects) {
     lines += 2;
     if (proj.description) lines += Math.ceil(proj.description.length / 60);
-    lines += proj.highlights.filter(Boolean).length;
+    lines += proj.highlights.filter(Boolean).reduce((n, h) => n + h.split('\n').length, 0);
   }
 
   // Education
